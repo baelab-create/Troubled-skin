@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>문제성 피부 4주 로테이션 관리 프로그램 | 숭실대학교 의공학 연구실</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #12202d;
+  --ink-soft: #3d4c5e;
+  --ink-light: #6b7785;
+  --ink-faint: #a8afba;
+  --paper: #f6f4ee;
+  --paper-warm: #efece1;
+  --card: #ffffff;
+  --border: #e2ded3;
+  --border-soft: #eceadf;
+  --accent: #3b5847;
+  --accent-deep: #223328;
+  --accent-soft: #ecf0ea;
+  --accent-tint: #f4f7f2;
+  --gold: #9a7f4f;
+  --gold-soft: #f0e9d5;
+  --warning: #a9552d;
+  --warning-soft: #f6e9dd;
+  --wk1: #6b8571;
+  --wk2: #a67a4a;
+  --wk3: #4a6475;
+  --wk4: #8a5a6b;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.75;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(59,88,71,0.03) 0%, transparent 40%),
+    radial-gradient(circle at 85% 70%, rgba(154,127,79,0.035) 0%, transparent 45%);
+  background-attachment: fixed;
+}
+
+.serif { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; }
+.mono { font-family: 'JetBrains Mono', monospace; font-weight: 500; letter-spacing: 0; }
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* ============ DOCUMENT HEADER ============ */
+.doc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 14px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--ink-light);
+  letter-spacing: 0.02em;
+  gap: 20px;
+}
+.doc-top .lab-id {
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.doc-top .confidential {
+  color: var(--warning);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  padding: 3px 10px;
+  border: 1px solid var(--warning);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+/* ============ HERO ============ */
+.hero {
+  padding: 40px 0 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 56px;
+  position: relative;
+}
+.hero .eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--accent);
+  margin-bottom: 14px;
+  letter-spacing: 0.01em;
+}
+.hero h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+.hero h1 .accent-word {
+  color: var(--accent);
+  font-weight: 700;
+}
+.hero .sub {
+  font-size: 16px;
+  color: var(--ink-soft);
+  max-width: 720px;
+  line-height: 1.8;
+}
+.hero .meta {
+  display: flex;
+  gap: 28px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+.hero .meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.hero .meta-item .label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-light);
+  font-weight: 500;
+}
+.hero .meta-item .value {
+  font-size: 13.5px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ============ SECTION ============ */
+.section { margin-bottom: 64px; }
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+}
+.section-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.section-header .section-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 26px;
+  color: var(--accent);
+  font-weight: 500;
+}
+.section-intro {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  max-width: 820px;
+  margin-bottom: 28px;
+}
+
+/* ============ ROTATION MATRIX ============ */
+.rotation-matrix {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(18,32,45,0.04);
+}
+.rot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.rot-cell {
+  padding: 24px 20px;
+  border-right: 1px solid var(--border-soft);
+  position: relative;
+}
+.rot-cell:last-child { border-right: none; }
+.rot-cell .wk-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.rot-cell[data-wk="1"] .wk-num { color: var(--wk1); }
+.rot-cell[data-wk="2"] .wk-num { color: var(--wk2); }
+.rot-cell[data-wk="3"] .wk-num { color: var(--wk3); }
+.rot-cell[data-wk="4"] .wk-num { color: var(--wk4); }
+.rot-cell .wk-label {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.rot-cell .wk-theme {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.rot-cell .wk-focus {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.rot-cell .wk-stars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.rot-cell .star-tag {
+  font-size: 10.5px;
+  padding: 3px 8px;
+  background: var(--accent-tint);
+  color: var(--accent);
+  border-radius: 3px;
+  font-weight: 500;
+  border: 1px solid var(--accent-soft);
+}
+
+@media (max-width: 820px) {
+  .rot-grid { grid-template-columns: repeat(2, 1fr); }
+  .rot-cell:nth-child(2) { border-right: none; }
+  .rot-cell:nth-child(1),
+  .rot-cell:nth-child(2) { border-bottom: 1px solid var(--border-soft); }
+}
+@media (max-width: 480px) {
+  .rot-grid { grid-template-columns: 1fr; }
+  .rot-cell { border-right: none; border-bottom: 1px solid var(--border-soft); }
+  .rot-cell:last-child { border-bottom: none; }
+}
+
+/* ============ ACCORDION ============ */
+details.acc {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+details.acc[open] {
+  box-shadow: 0 6px 24px rgba(18,32,45,0.06);
+  border-color: #d4cfc0;
+}
+details.acc summary {
+  padding: 20px 28px;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  user-select: none;
+}
+details.acc summary::-webkit-details-marker { display: none; }
+details.acc summary:hover {
+  background: linear-gradient(to right, var(--accent-tint), transparent 60%);
+}
+.acc-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-tint);
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.acc-icon svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.acc-title {
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+  line-height: 1.4;
+}
+.acc-title .kicker {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 3px;
+}
+.acc-arrow {
+  width: 10px;
+  height: 10px;
+  border-right: 1.8px solid var(--ink-soft);
+  border-bottom: 1.8px solid var(--ink-soft);
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+details.acc[open] .acc-arrow { transform: rotate(-135deg); }
+.acc-body {
+  padding: 4px 28px 28px;
+  border-top: 1px solid var(--border-soft);
+  margin-top: 0;
+}
+details.acc[open] .acc-body { animation: slideDown 0.3s ease; }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Week-themed accordions */
+details.wk-acc[data-wk="1"] { border-left: 3px solid var(--wk1); }
+details.wk-acc[data-wk="2"] { border-left: 3px solid var(--wk2); }
+details.wk-acc[data-wk="3"] { border-left: 3px solid var(--wk3); }
+details.wk-acc[data-wk="4"] { border-left: 3px solid var(--wk4); }
+
+details.wk-acc[data-wk="1"] .acc-icon { background: rgba(107,133,113,0.12); color: var(--wk1); }
+details.wk-acc[data-wk="2"] .acc-icon { background: rgba(166,122,74,0.12); color: var(--wk2); }
+details.wk-acc[data-wk="3"] .acc-icon { background: rgba(74,100,117,0.12); color: var(--wk3); }
+details.wk-acc[data-wk="4"] .acc-icon { background: rgba(138,90,107,0.12); color: var(--wk4); }
+
+details.wk-acc .acc-icon {
+  width: 40px;
+  height: 40px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 20px;
+  border-radius: 50%;
+}
+
+/* ============ PROTOCOL STEPS ============ */
+.program-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0;
+  margin: 20px 0 28px;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--accent-tint);
+}
+.pm-cell {
+  padding: 14px 18px;
+  border-right: 1px solid var(--border-soft);
+}
+.pm-cell:last-child { border-right: none; }
+.pm-cell .pm-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.pm-cell .pm-value {
+  font-size: 13.5px;
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.4;
+}
+@media (max-width: 640px) {
+  .program-meta { grid-template-columns: 1fr 1fr; }
+  .pm-cell { border-bottom: 1px solid var(--border-soft); }
+  .pm-cell:nth-child(2n) { border-right: none; }
+}
+
+.protocol-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 28px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.005em;
+}
+.protocol-title::before {
+  content: '';
+  width: 12px;
+  height: 2px;
+  background: var(--accent);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 48px 80px 1fr;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px dashed var(--border-soft);
+  align-items: start;
+}
+.step:last-child { border-bottom: none; }
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--accent);
+  font-weight: 500;
+  line-height: 1;
+  padding-top: 2px;
+}
+.step-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: var(--ink-light);
+  padding-top: 6px;
+  letter-spacing: 0;
+}
+.step-content .step-name {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.step-content .step-product {
+  font-size: 12.5px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.step-content .step-desc {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+@media (max-width: 560px) {
+  .step { grid-template-columns: 36px 1fr; gap: 12px; }
+  .step-time { grid-column: 2; padding-top: 0; margin-top: 4px; order: 3; }
+}
+
+/* Ingredient contribution callout */
+.callout {
+  background: var(--accent-tint);
+  border: 1px solid var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+.callout-title {
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.callout.warn {
+  background: var(--warning-soft);
+  border-color: #ecd9c6;
+  border-left-color: var(--warning);
+}
+.callout.warn .callout-title { color: var(--warning); }
+
+.talk-box {
+  background: linear-gradient(135deg, var(--gold-soft) 0%, #fdf9eb 100%);
+  border: 1px solid #e8dcb5;
+  border-radius: 6px;
+  padding: 18px 22px;
+  margin: 20px 0;
+  position: relative;
+}
+.talk-box::before {
+  content: '"';
+  position: absolute;
+  top: -18px;
+  left: 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 72px;
+  color: var(--gold);
+  line-height: 1;
+  opacity: 0.35;
+}
+.talk-box .talk-label {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.talk-box .talk-quote {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.75;
+  font-weight: 500;
+}
+
+/* ============ MATRIX TABLE (Ingredient Analysis) ============ */
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0 8px;
+}
+.matrix-table th, .matrix-table td {
+  padding: 11px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+.matrix-table th {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  font-weight: 600;
+  background: var(--paper-warm);
+  border-bottom: 1.5px solid var(--border);
+}
+.matrix-table td.ingredient {
+  font-weight: 500;
+  color: var(--ink);
+  min-width: 140px;
+}
+.matrix-table td.role {
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-size: 12.5px;
+}
+.matrix-table .tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  background: var(--accent-tint);
+  color: var(--accent);
+  border-radius: 3px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+@media (max-width: 640px) {
+  .matrix-table { font-size: 12px; }
+  .matrix-table th, .matrix-table td { padding: 9px 10px; }
+}
+
+/* ============ SCIENCE DIAGRAM ============ */
+.diagram-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 24px;
+  margin: 20px 0;
+}
+.diagram-box svg { width: 100%; height: auto; display: block; }
+.diagram-caption {
+  font-size: 12px;
+  color: var(--ink-light);
+  margin-top: 10px;
+  text-align: center;
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+}
+
+/* Comparison mini-grid */
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+.mini-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+}
+.mini-card .mini-head {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.mini-card .mini-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 4px;
+  line-height: 1;
+}
+.mini-card .mini-desc {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.mini-card.highlight {
+  background: var(--accent-tint);
+  border-color: var(--accent-soft);
+}
+.mini-card.highlight .mini-num { color: var(--accent-deep); }
+@media (max-width: 640px) {
+  .mini-grid { grid-template-columns: 1fr; }
+}
+
+/* ============ FOOTER ============ */
+.doc-footer {
+  margin-top: 80px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 11.5px;
+  color: var(--ink-light);
+  line-height: 1.7;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.doc-footer .foot-left { flex: 1; min-width: 260px; }
+.doc-footer .foot-title {
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+.doc-footer .foot-right {
+  text-align: right;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+/* Text helpers */
+.prose-body p { margin-bottom: 14px; font-size: 14.5px; color: var(--ink-soft); line-height: 1.85; }
+.prose-body p:last-child { margin-bottom: 0; }
+.prose-body strong { color: var(--ink); font-weight: 600; }
+.prose-body .hl { background: linear-gradient(transparent 60%, var(--accent-tint) 60%); padding: 0 2px; font-weight: 500; color: var(--ink); }
+
+ul.clean-list {
+  list-style: none;
+  padding: 0;
+}
+ul.clean-list li {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+ul.clean-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 8px;
+  height: 1.5px;
+  background: var(--accent);
+}
+
+/* Two column layout */
+.rg-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .rg-2col { grid-template-columns: 1fr; }
+}
+
+/* Print */
+@media print {
+  body { background: white; }
+  .container { padding: 20px; max-width: 100%; }
+  details.acc { break-inside: avoid; page-break-inside: avoid; }
+  details.acc summary { pointer-events: none; }
+  details:not([open]) { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ============ DOCUMENT TOP META ============ -->
+<div class="doc-top">
+  <div class="lab-id">
+    숭실대학교 의공학 연구실 · 배원규 교수 연구실<br>
+    <span style="color:var(--ink-light); font-weight:400;">에스테틱 전문가 교육용</span>
+  </div>
+  <div class="confidential">오프라인 비공개 교육자료 · 유출 및 공유 금지</div>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="eyebrow">Esthetic Protocol Guide — Problem Skin Rotation Series</div>
+  <h1>
+    피부장벽이 손상된 <span class="accent-word">문제성 피부</span>를 위한<br>
+    4주 로테이션 관리 프로그램
+  </h1>
+  <p class="sub">
+    여드름·지루성 유형의 문제성 피부는 각질형성세포 분화 리듬과 피부장벽이 동시에 약화된 상태입니다. 본 프로그램은 1~2주 간격으로 재방문하는 고객을 대상으로, 주차별 뚜렷한 테마와 제품 조합이 회전하도록 설계하여 관리 피로감을 최소화하고 장벽 재정비 → 각질·영양 → 장벽 리셋 → 윤광 마감의 점진적 흐름을 만듭니다.
+  </p>
+  <div class="meta">
+    <div class="meta-item">
+      <span class="label">Target</span>
+      <span class="value">문제성 피부 · 민감·손상된 피부장벽</span>
+    </div>
+    <div class="meta-item">
+      <span class="label">Cycle</span>
+      <span class="value">1~2주 간격 × 4주 로테이션</span>
+    </div>
+    <div class="meta-item">
+      <span class="label">Core Platform</span>
+      <span class="value">병풀캘러스세포외소포 + 센텔라 트리플 액티브</span>
+    </div>
+    <div class="meta-item">
+      <span class="label">Edition</span>
+      <span class="value serif">Dr. BAE · 2026 Ed.</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ SECTION 01 · ROTATION MATRIX ============ -->
+<section class="section">
+  <div class="section-header">
+    <h2>4주 로테이션 한눈에 보기</h2>
+    <span class="section-num">01</span>
+  </div>
+  <p class="section-intro">
+    각 주차는 서로 다른 "주연 제품"과 "테마"를 가집니다. 고객이 같은 관리를 반복한다고 느끼지 않도록 설계되었으며, 4주차가 끝나면 자연스럽게 1주차로 돌아갑니다. 표피 턴오버 주기(약 28~45일)와 자연스럽게 맞물립니다.
+  </p>
+
+  <div class="rotation-matrix">
+    <div class="rot-grid">
+      <div class="rot-cell" data-wk="1">
+        <div class="wk-num">01</div>
+        <div class="wk-label">Week One</div>
+        <div class="wk-theme">진정 & 장벽 정돈</div>
+        <div class="wk-focus">손상된 피부장벽을 진정시키는 가장 순한 온보딩 관리</div>
+        <div class="wk-stars">
+          <span class="star-tag">리퀴드 마스크</span>
+          <span class="star-tag">피디로엔</span>
+        </div>
+      </div>
+      <div class="rot-cell" data-wk="2">
+        <div class="wk-num">02</div>
+        <div class="wk-label">Week Two</div>
+        <div class="wk-theme">각질 정돈 & 집중 영양</div>
+        <div class="wk-focus">PHA로 각질 정돈 후 아미노산·펩타이드 영양 공급</div>
+        <div class="wk-stars">
+          <span class="star-tag">엑소토카인 부스터</span>
+          <span class="star-tag">칼리파우더</span>
+        </div>
+      </div>
+      <div class="rot-cell" data-wk="3">
+        <div class="wk-num">03</div>
+        <div class="wk-label">Week Three</div>
+        <div class="wk-theme">장벽 리셋 & 마이크로바이옴</div>
+        <div class="wk-focus">각질 관리를 건너뛰고 장벽·수분·마이크로바이옴에 집중</div>
+        <div class="wk-stars">
+          <span class="star-tag">피디로엔</span>
+          <span class="star-tag">토코포르테</span>
+        </div>
+      </div>
+      <div class="rot-cell" data-wk="4">
+        <div class="wk-num">04</div>
+        <div class="wk-label">Week Four</div>
+        <div class="wk-theme">윤광 & 종합 컴플리트</div>
+        <div class="wk-focus">비타민 네트워크와 종합 영양으로 윤광 마감</div>
+        <div class="wk-stars">
+          <span class="star-tag">토코포르테</span>
+          <span class="star-tag">엑소토카인 부스터</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 02 · DESIGN PRINCIPLES ============ -->
+<section class="section">
+  <div class="section-header">
+    <h2>관리 프로그램 설계 사이언스</h2>
+    <span class="section-num">02</span>
+  </div>
+  <p class="section-intro">
+    본 프로그램이 왜 이렇게 구성되었는지, 각 제품이 어떤 원리로 문제성 피부에 유리하게 작용하는지를 정리한 섹션입니다. 각 원리를 열어 상세 배경을 확인할 수 있습니다.
+  </p>
+
+  <!-- Principle 1: PHA -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+      </span>
+      <span class="acc-title">
+        <span class="kicker">Principle 01</span>
+        PHA — 손상된 피부장벽에서 안전한 각질 정돈
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <div class="prose-body">
+        <p>각질 정돈의 핵심은 "얼마나 강하게"가 아니라 "어느 층까지 도달하는가"입니다. AHA(α-hydroxy acid) 계열의 글리콜릭애씨드는 분자량이 <strong>약 76 Da</strong>로 작아 각질층을 넘어 살아있는 표피로 침투하며 자극을 유발합니다. BHA(β-hydroxy acid) 계열의 살리실릭애씨드는 <strong>138 Da</strong>에 지용성이라 피지와 모공 내부까지 깊이 들어갑니다.</p>
+        <p>반면 PHA(polyhydroxy acid)인 <span class="hl">글루코노락톤은 약 180 Da</span>의 더 큰 분자로, 표피 표면 각질에만 국한해 작용합니다. 글루콘산으로의 가수분해 과정에서 <strong>항산화 특성</strong>도 함께 갖습니다. 이 때문에 피부장벽이 약화된 문제성 피부에서 AHA/BHA보다 훨씬 안전한 선택지가 됩니다.</p>
+      </div>
+
+      <div class="mini-grid">
+        <div class="mini-card">
+          <div class="mini-head">AHA · 글리콜릭</div>
+          <div class="mini-num">~76 Da</div>
+          <div class="mini-desc">표피 내부까지 침투, 자극 높음</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-head">BHA · 살리실릭</div>
+          <div class="mini-num">138 Da</div>
+          <div class="mini-desc">지용성, 모공 내부까지 작용</div>
+        </div>
+        <div class="mini-card highlight">
+          <div class="mini-head">PHA · 글루코노락톤</div>
+          <div class="mini-num">~180 Da</div>
+          <div class="mini-desc">표층 작용, 항산화, 손상 장벽에 안전</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">리퀴드 마스크의 설계 포인트</div>
+        닥터배 리퀴드 마스크는 PHA 10%를 씻어내지 않아도 되는 No-Rinse 포뮬러로 구성되며, 병풀캘러스세포외소포·알란토인·다이포타슘글리시리제이트(감초 유래)·판테놀 등 진정 성분이 함께 배합되어 있어 문제성 피부에서 사용 가능한 드문 형태의 필링 제품입니다.
+      </div>
+    </div>
+  </details>
+
+  <!-- Principle 2: Centella EV Platform -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2s-4 4-4 8a4 4 0 0 0 8 0c0-4-4-8-4-8z"/><path d="M12 14v8M8 18h8"/></svg>
+      </span>
+      <span class="acc-title">
+        <span class="kicker">Principle 02</span>
+        병풀캘러스세포외소포 + 센텔라 트리플 액티브
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <div class="prose-body">
+        <p>본 프로그램의 모든 주차에는 <span class="hl">병풀캘러스세포외소포(Centella Asiatica Callus-derived Extracellular Vesicles)</span>가 일관되게 배치됩니다. 리퀴드 마스크·에센스 겔·토코포르테·엑소토카인 부스터 네 가지 제품에 공통 탑재되어 있어, 어떤 주차의 관리에서도 세포외소포 노출이 누적되도록 설계되어 있습니다.</p>
+        <p>특히 <strong>에센스 겔</strong>에는 병풀 유래의 트리플 액티브가 고함량으로 추가됩니다.</p>
+        <ul class="clean-list">
+          <li><strong>마데카식애씨드(Madecassic Acid)</strong> — 트리테르페노이드 계열, 피부 컨디셔닝 및 민감 피부 진정</li>
+          <li><strong>아시아틱애씨드(Asiatic Acid)</strong> — 각질층 수분 유지 환경 조성</li>
+          <li><strong>아시아티코사이드(Asiaticoside)</strong> — 배당체 형태, 피부 컨디셔닝</li>
+        </ul>
+        <p>세포외소포는 지질 이중층으로 보호된 나노 구조의 운반체로, 피부 표층에서 장시간 머무르며 동봉된 생리활성 성분들과 함께 <strong>진정·컨디셔닝 매트릭스</strong>를 형성합니다. 본 프로그램은 이 "EV + 센텔라 트리플" 축을 4주 내내 일관되게 노출시키는 것을 핵심 설계로 합니다.</p>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">왜 "엑소좀"이 아니라 "세포외소포"인가</div>
+        화장품 표시·광고법상 "엑소좀"이라는 표현은 인체 유래 원료를 연상시킬 수 있어 식물 유래 원료에는 사용이 권장되지 않습니다. INCI 등재 명칭 및 법적 표기 기준에 따라 <strong>"세포외소포(Extracellular Vesicles)"</strong>로 기재하며, 고객 응대에서도 이 용어를 사용합니다.
+      </div>
+    </div>
+  </details>
+
+  <!-- Principle 3: Calcium Gradient -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 20h18M6 20V10M11 20V6M16 20V13M21 20V8"/></svg>
+      </span>
+      <span class="acc-title">
+        <span class="kicker">Principle 03</span>
+        피부장벽 칼슘그래디언트(Calcium Gradient)
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <div class="prose-body">
+        <p>표피는 <span class="hl">기저층의 낮은 칼슘 농도에서 과립층의 높은 농도로 이어지는 뚜렷한 칼슘 농도 구배(gradient)</span>를 가집니다. 이 농도차 자체가 각질형성세포 분화와 피부장벽 조립의 <strong>생리적 신호</strong>로 작용합니다. 피부장벽이 손상된 상태에서는 이 농도차가 붕괴되며, 각질형성세포 분화 리듬이 흐트러져 정상적인 각질층 구조 형성이 어려워집니다.</p>
+        <p>닥터배 <strong>칼리파우더</strong>는 이 원리를 고려해 설계된 제품으로, 칼슘판토테네이트(판토텐산칼슘)·하이드롤라이즈드콜라겐·소듐하이알루로네이트·만니톨을 <span class="hl">동결건조 분말</span> 형태로 구성하여 사용 직전에 액상 제품과 혼합해 즉시 활성화시킵니다. 동결건조 형태는 판토테네이트의 안정성을 높이는 동시에 프리미엄 브랜딩에도 유리한 포맷입니다.</p>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-title">⚠ 제형 호환성 주의 — 칼리파우더 혼합 가이드</div>
+        칼리파우더의 Ca²⁺ 이온은 <strong>음이온성 아크릴레이트/카보머 증점제</strong>의 전하를 중화시켜 점도가 붕괴될 수 있습니다. 따라서 제형적으로 다음과 같은 혼합 가이드를 따릅니다.
+        <div style="margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+          <div style="padding:8px 12px; background:rgba(107,133,113,0.1); border-radius:4px; font-size:12.5px;"><strong>혼합 권장</strong><br>· 토코포르테 (히알루론산 기반)<br>· 엑소토카인 부스터 (잔탄검 기반)<br>· 리퀴드 마스크 (저점도)</div>
+          <div style="padding:8px 12px; background:var(--warning-soft); border-radius:4px; font-size:12.5px;"><strong>직접 혼합 지양</strong><br>· 에센스 겔 (아크릴레이트 크로스폴리머)<br>· 피디로엔 (암모늄아크릴로일…코폴리머)<br>→ 순차 도포로 대체</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Principle 4: EGF on compromised skin -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      </span>
+      <span class="acc-title">
+        <span class="kicker">Principle 04</span>
+        EGF·성장인자류 펩타이드와 "피부 상태"
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <div class="prose-body">
+        <p>엑소토카인 부스터에는 EGF 유사 성분인 <strong>에스에이치-올리고펩타이드-1</strong>과 다수의 에스에이치-폴리펩타이드(-1, -2, -3, -4, -9, -11, -22 등)가 배합되어 있습니다. 일반적으로 EGF는 <strong>약 6,200 Da</strong> 수준의 단백질로, 각질층의 이른바 <span class="hl">"500 Da 법칙"</span>에 따라 건강한 피부 표면을 통한 경피 투과가 제한적입니다.</p>
+        <p>그러나 피부장벽이 약화된 문제성 피부나 각질이 정돈된 상태에서는 표면 투과 환경이 달라지며, 성장인자류 펩타이드가 표피 표층 환경에서 피부 컨디셔닝에 기여할 수 있는 여지가 커집니다. 본 프로그램이 <strong>Week 2와 Week 4에 엑소토카인 부스터를 전략적으로 배치</strong>한 이유가 여기 있습니다 — PHA 각질 정돈 이후 또는 3주간의 장벽 정비 이후, 펩타이드 노출 환경이 가장 유리한 시점에 배치한 것입니다.</p>
+      </div>
+    </div>
+  </details>
+
+  <!-- Principle 5: Microbiome + PDRN -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon">
+        <svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><path d="M10 10l4 4M5 13l-2 2M19 5l2-2"/></svg>
+      </span>
+      <span class="acc-title">
+        <span class="kicker">Principle 05</span>
+        마이크로바이옴 · PDRN · 진정 콤플렉스
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <div class="prose-body">
+        <p>피디로엔 부스터 앰플은 문제성 피부에서 특히 의미가 있는 구성입니다. <strong>락토바실러스발효추출여과물</strong>은 유익균 대사산물 기반의 마이크로바이옴 케어 성분이며, <strong>하이드롤라이즈드디엔에이</strong>는 화장품 등급의 DNA 분해 단편(PDRN 컨셉 유사 성분)으로 피부 컨디셔닝에 기여합니다.</p>
+        <p>여기에 <strong>프로폴리스추출물·오레가노추출물·마데카소사이드·알란토인·판테놀</strong>이 함께 배합되어 민감한 피부에 다층적 진정 환경을 조성합니다. 또한 <strong>트라넥사믹애씨드</strong>가 포함되어 염증 후 색소 침착(PIH) 성향이 있는 문제성 피부에서의 톤 정돈에도 유리합니다.</p>
+      </div>
+    </div>
+  </details>
+
+  <!-- Principle 6: Hyaluronic + Vitamin Network -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.5L12 14.5 7.1 17.2 8 11.7 4 7.8l5.5-.8z"/></svg>
+      </span>
+      <span class="acc-title">
+        <span class="kicker">Principle 06</span>
+        7종 히알루론산 + 비타민 네트워크
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <div class="prose-body">
+        <p>토코포르테 부스터 앰플은 액상 제형의 가장 큰 장점인 <strong>에어 스프레이 응용</strong>을 문제성 피부 관리에서 중요한 "쿨링 & 수분 마감" 단계로 활용할 수 있게 해줍니다. 문제성 피부는 관리 후반에 열감이 동반되기 쉬운데, 스프레이를 통한 미스트 분사는 열감을 빠르게 가라앉히는 실용적 수단입니다.</p>
+        <p>또한 토코포르테는 <strong>7종 분자량의 히알루론산</strong>(초저분자부터 고분자까지)을 풀 스펙트럼으로 배합하여 각질층의 각 깊이에서 수분 매트릭스를 형성하고, 여기에 <strong>복합 비타민 네트워크</strong>(B1·B3·B5·B6·B7·B9·B12·C·E·K)가 함께 작용하여 항산화 환경을 만듭니다. 페룰릭애씨드·3-O-에틸아스코빅애씨드·토코페롤·글루타티온·퀘세틴이 함께 배합되어 있어 항산화 다층 구조를 형성합니다.</p>
+      </div>
+
+      <table class="matrix-table">
+        <thead>
+          <tr><th style="width:40%;">분자량 계열</th><th>각질층 내 작용 깊이</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="ingredient">초저분자 HA<br><span style="font-size:11px; color:var(--ink-light); font-weight:400;">가수분해 히알루로닉애씨드 등</span></td><td class="role">각질층 가장 깊은 층까지 수분 공급</td></tr>
+          <tr><td class="ingredient">저·중분자 HA<br><span style="font-size:11px; color:var(--ink-light); font-weight:400;">소듐하이알루로네이트, 포타슘하이알루로네이트</span></td><td class="role">각질층 중간층 수분 매트릭스</td></tr>
+          <tr><td class="ingredient">고분자 HA<br><span style="font-size:11px; color:var(--ink-light); font-weight:400;">하이알루로닉애씨드, 크로스폴리머, 트라이모늄형</span></td><td class="role">표면 막 형성, 장시간 수분 유지</td></tr>
+          <tr><td class="ingredient">변형 HA<br><span style="font-size:11px; color:var(--ink-light); font-weight:400;">아세틸레이티드 하이알루로네이트</span></td><td class="role">표면 흡착력 강화, 촉촉한 피니시</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</section>
+
+<!-- ============ SECTION 03 · WEEKLY PROGRAMS ============ -->
+<section class="section">
+  <div class="section-header">
+    <h2>주차별 관리 프로그램</h2>
+    <span class="section-num">03</span>
+  </div>
+  <p class="section-intro">
+    각 주차를 열어 <strong>단계별 프로토콜 · 사용 제품 · 핵심 성분 기여 · 고객 커뮤니케이션 포인트</strong>를 확인할 수 있습니다. 프로그램은 4주 완결 후 1주차로 다시 순환합니다.
+  </p>
+
+  <!-- ======== WEEK 1 ======== -->
+  <details class="acc wk-acc" data-wk="1" open>
+    <summary>
+      <span class="acc-icon">I</span>
+      <span class="acc-title">
+        <span class="kicker">Week 01 · Welcome Reset</span>
+        진정 & 장벽 정돈 — 가장 순한 온보딩 관리
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+
+      <div class="program-meta">
+        <div class="pm-cell"><div class="pm-label">Duration</div><div class="pm-value">약 70분</div></div>
+        <div class="pm-cell"><div class="pm-label">Intensity</div><div class="pm-value">Low · 진정 중심</div></div>
+        <div class="pm-cell"><div class="pm-label">Key Products</div><div class="pm-value">리퀴드 마스크 · 피디로엔</div></div>
+        <div class="pm-cell"><div class="pm-label">Cali Powder</div><div class="pm-value">미사용</div></div>
+      </div>
+
+      <div class="prose-body">
+        <p>첫 방문이거나 로테이션의 시작점이 되는 이 주차는 "<strong>피부에게 숨을 돌려주는</strong>" 순서로 구성됩니다. 각질 정돈은 리퀴드 마스크의 PHA가 온건하게 수행하고, 이후 단계는 모두 진정·컨디셔닝·수분에만 집중합니다. Cali Powder는 2주차부터 단계적으로 도입합니다.</p>
+      </div>
+
+      <h3 class="protocol-title">단계별 프로토콜</h3>
+
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-time mono">~5 min</div>
+        <div class="step-content">
+          <div class="step-name">클렌징 & 예비 준비</div>
+          <div class="step-product">저자극 클렌저 · 자극 없는 물티슈</div>
+          <div class="step-desc">피부장벽이 약화된 상태이므로 이중세안은 지양. 약산성 클렌저로 부드럽게 세안.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-time mono">~8 min</div>
+        <div class="step-content">
+          <div class="step-name">리퀴드 마스크 프리 컨디셔닝 팩</div>
+          <div class="step-product">Exotokine Liquid Mask (PHA 10%, 시카세포외소포)</div>
+          <div class="step-desc">화장솜 4~6장에 충분히 적셔 얼굴 전체에 부착. <strong>스팀 사용 금지</strong>, 건조하지 않게 덮어두기. PHA 10%가 각질을 온건하게 정돈하면서 세포외소포·알란토인·감초 유래 진정 성분이 동시에 작용.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-time mono">~10 min</div>
+        <div class="step-content">
+          <div class="step-name">에센스 겔 릴리프 롤링</div>
+          <div class="step-product">Exotokine Essence Gel</div>
+          <div class="step-desc">얼굴~데콜테까지 미끄러운 제형으로 롤링 마사지. 덧발라도 밀리지 않아 관리자가 자유롭게 작업 가능. 1~2분 후 100% 흡수.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-time mono">~12 min</div>
+        <div class="step-content">
+          <div class="step-name">피디로엔 앰플 전면 도포 (주연)</div>
+          <div class="step-product">Pidiroenne Booster Ampoule</div>
+          <div class="step-desc">마이크로바이옴·하이드롤라이즈드 DNA·프로폴리스·마데카소사이드·트라넥사믹애씨드의 다층 진정 네트워크. 가볍게 탭핑 흡수.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-time mono">~5 min</div>
+        <div class="step-content">
+          <div class="step-name">토코포르테 쿨링 미스트</div>
+          <div class="step-product">Exotokine Tocoforte Booster</div>
+          <div class="step-desc">에어 스프레이를 30cm 거리에서 2~3회 분사. 7종 히알루론산 + 비타민 네트워크가 피부에 쿨링 & 수분 코팅을 형성.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">06</div>
+        <div class="step-time mono">~10 min</div>
+        <div class="step-content">
+          <div class="step-name">리퀴드 마스크 박막 마감</div>
+          <div class="step-product">Exotokine Liquid Mask</div>
+          <div class="step-desc">남은 제품 1/3 정도를 얇게 도포 후 자연 흡수. No-Rinse로 마무리.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">이 주차의 핵심 성분 기여</div>
+        <strong>PHA 10%</strong>(글루코노락톤)가 각질을 부드럽게 정돈하는 사이, <strong>락토바실러스발효추출여과물 + 하이드롤라이즈드디엔에이 + 프로폴리스추출물 + 마데카소사이드</strong>가 다층 진정 네트워크를 형성합니다. 병풀캘러스세포외소포는 4가지 제품 모두에 탑재되어 있어, 이 주차 한 번에 <strong>세포외소포가 4회 누적 노출</strong>됩니다.
+      </div>
+
+      <div class="talk-box">
+        <div class="talk-label">고객 커뮤니케이션 포인트</div>
+        <div class="talk-quote">"오늘은 피부에게 숨 돌릴 시간을 만들어드리는 '리셋 관리'입니다. 진정 중심의 부드러운 단계로 구성했기 때문에 관리 후 붉음이 거의 올라오지 않으실 거예요."</div>
+      </div>
+
+    </div>
+  </details>
+
+  <!-- ======== WEEK 2 ======== -->
+  <details class="acc wk-acc" data-wk="2">
+    <summary>
+      <span class="acc-icon">II</span>
+      <span class="acc-title">
+        <span class="kicker">Week 02 · Resurface & Nourish</span>
+        각질 정돈 & 집중 영양 — PHA 후 아미노산·펩타이드 공급
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+
+      <div class="program-meta">
+        <div class="pm-cell"><div class="pm-label">Duration</div><div class="pm-value">약 80분</div></div>
+        <div class="pm-cell"><div class="pm-label">Intensity</div><div class="pm-value">Mid · 영양 집중</div></div>
+        <div class="pm-cell"><div class="pm-label">Key Products</div><div class="pm-value">리퀴드 마스크 · 엑소토카인 부스터 · 칼리파우더</div></div>
+        <div class="pm-cell"><div class="pm-label">Cali Powder</div><div class="pm-value">부스터와 혼합</div></div>
+      </div>
+
+      <div class="prose-body">
+        <p>Week 1에서 피부가 안정된 상태를 확인했다면, Week 2에서는 <strong>PHA로 각질을 조금 더 집중적으로 정돈한 후</strong> 피부장벽이 다소 열린 상태에서 9종 아미노산·다수의 펩타이드·MNM·EGF 유사 성분을 포함한 엑소토카인 부스터를 전면에 도입합니다. 칼리파우더는 부스터에 혼합해 칼슘그래디언트 요소를 함께 제공합니다.</p>
+      </div>
+
+      <h3 class="protocol-title">단계별 프로토콜</h3>
+
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-time mono">~5 min</div>
+        <div class="step-content">
+          <div class="step-name">클렌징</div>
+          <div class="step-product">저자극 클렌저</div>
+          <div class="step-desc">약산성 세안으로 가볍게 준비.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-time mono">~10 min</div>
+        <div class="step-content">
+          <div class="step-name">리퀴드 마스크 정밀 각질 정돈</div>
+          <div class="step-product">Exotokine Liquid Mask</div>
+          <div class="step-desc">T존 및 각질이 두꺼운 부위 중심으로 화장솜 팩 형태로 10분 방치. 민감 부위(눈가, 입가)는 노출 시간 단축.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-time mono">~10 min</div>
+        <div class="step-content">
+          <div class="step-name">에센스 겔 감압 마사지</div>
+          <div class="step-product">Exotokine Essence Gel</div>
+          <div class="step-desc">리퀴드 마스크 위에 바로 에센스 겔 도포, 얼굴~데콜테까지 확장 마사지. 덧발라도 밀리지 않아 마사지 시간 확보가 용이.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-time mono">~20 min</div>
+        <div class="step-content">
+          <div class="step-name">엑소토카인 부스터 + 칼리파우더 혼합 집중 도포 <span style="display:inline-block; background:var(--gold-soft); color:var(--gold); padding:2px 8px; border-radius:3px; font-size:10.5px; font-weight:600; letter-spacing:0.05em; margin-left:6px;">이 주의 주연</span></div>
+          <div class="step-product">Exotokine Booster + Cali Powder</div>
+          <div class="step-desc"><strong>엑소토카인 부스터 앰플에 칼리파우더 1회분을 직접 섞어</strong> 용해 후 즉시 도포. 엑소토카인 부스터는 잔탄검 기반 제형으로 칼리파우더와 혼합해도 점도 안정성이 유지됩니다. 9종 아미노산·SH-펩타이드·EGF 유사 성분·시카세포외소포·MNM·루페올·글루타티온이 칼슘그래디언트와 함께 전달됨.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-time mono">~5 min</div>
+        <div class="step-content">
+          <div class="step-name">토코포르테 쿨링 피니시</div>
+          <div class="step-product">Exotokine Tocoforte Booster</div>
+          <div class="step-desc">스프레이 2~3회 분사. 집중 영양 단계 후 열감 관리와 수분 마감.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">왜 이 주차에 EGF·펩타이드·칼슘을 집중시키는가</div>
+        PHA로 각질이 정돈된 상태에서 피부장벽의 표면 흡수 환경이 유리해집니다. 이때 엑소토카인 부스터의 <strong>SH-올리고펩타이드-1(EGF 유사), SH-폴리펩타이드-11, 9종 필수 아미노산, MNM, 루페올</strong>의 피부 표층 기여가 가장 커집니다. 여기에 칼리파우더가 칼슘 신호를 더해 분화 환경을 함께 조정합니다.
+      </div>
+
+      <div class="talk-box">
+        <div class="talk-label">고객 커뮤니케이션 포인트</div>
+        <div class="talk-quote">"오늘은 순한 각질 정돈 후 피부가 가장 잘 받아들이는 타이밍에 9종 아미노산과 고농도 펩타이드를 집중 공급하는 '스페셜 영양 관리'입니다. 관리 후 피부결이 눈에 띄게 정돈되신 느낌을 받으실 거예요."</div>
+      </div>
+
+    </div>
+  </details>
+
+  <!-- ======== WEEK 3 ======== -->
+  <details class="acc wk-acc" data-wk="3">
+    <summary>
+      <span class="acc-icon">III</span>
+      <span class="acc-title">
+        <span class="kicker">Week 03 · Barrier Core</span>
+        장벽 리셋 & 마이크로바이옴 — 각질 관리 건너뛰는 휴식 주간
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+
+      <div class="program-meta">
+        <div class="pm-cell"><div class="pm-label">Duration</div><div class="pm-value">약 70분</div></div>
+        <div class="pm-cell"><div class="pm-label">Intensity</div><div class="pm-value">Low-Mid · 장벽 리셋</div></div>
+        <div class="pm-cell"><div class="pm-label">Key Products</div><div class="pm-value">피디로엔 · 토코포르테 · 칼리파우더</div></div>
+        <div class="pm-cell"><div class="pm-label">Cali Powder</div><div class="pm-value">토코포르테와 혼합</div></div>
+      </div>
+
+      <div class="prose-body">
+        <p>이 주차는 <strong>의도적으로 각질 정돈 단계를 제외</strong>합니다. 2주차에서 영양을 집중 공급받은 피부에게 "각질 자극 없는 휴식 주간"을 제공하여, <strong>마이크로바이옴 균형·PDRN 컨디셔닝·칼슘그래디언트·히알루론산 수분 매트릭스</strong>라는 네 가지 축에만 집중합니다.</p>
+      </div>
+
+      <h3 class="protocol-title">단계별 프로토콜</h3>
+
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-time mono">~5 min</div>
+        <div class="step-content">
+          <div class="step-name">클렌징</div>
+          <div class="step-product">저자극 클렌저</div>
+          <div class="step-desc">간결한 세안.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-time mono">~10 min</div>
+        <div class="step-content">
+          <div class="step-name">에센스 겔 진정 롤링 (PHA 없이)</div>
+          <div class="step-product">Exotokine Essence Gel</div>
+          <div class="step-desc">PHA 단계 없이 바로 에센스 겔 마사지로 시작. 병풀캘러스세포외소포 + 마데카식/아시아틱/아시아티코사이드의 센텔라 트리플 액티브가 유일한 진정 축을 구성.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-time mono">~15 min</div>
+        <div class="step-content">
+          <div class="step-name">피디로엔 앰플 2회 레이어링 <span style="display:inline-block; background:var(--gold-soft); color:var(--gold); padding:2px 8px; border-radius:3px; font-size:10.5px; font-weight:600; letter-spacing:0.05em; margin-left:6px;">이 주의 주연</span></div>
+          <div class="step-product">Pidiroenne Booster Ampoule</div>
+          <div class="step-desc">1차 도포 후 흡수 시간을 충분히 둔 뒤, 얇은 2차 도포. 마이크로바이옴·PDRN 컨셉 성분·프로폴리스·오레가노·트라넥사믹애씨드가 누적 전달됨. <strong>칼리파우더와는 직접 혼합하지 않음</strong>(제형 호환성).</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-time mono">~10 min</div>
+        <div class="step-content">
+          <div class="step-name">칼리파우더 + 토코포르테 혼합 미스트</div>
+          <div class="step-product">Cali Powder + Exotokine Tocoforte</div>
+          <div class="step-desc">칼리파우더 1회분을 토코포르테에 용해(히알루론산 기반 제형으로 호환성 양호). 얼굴 전체 분사 또는 손으로 눌러 펴바르기. 칼슘그래디언트 + 7종 히알루론산 + 비타민 네트워크를 한 번에 제공.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-time mono">~10 min</div>
+        <div class="step-content">
+          <div class="step-name">리퀴드 마스크 박막 마감</div>
+          <div class="step-product">Exotokine Liquid Mask</div>
+          <div class="step-desc">소량을 얇게 마감. No-Rinse로 PHA 부담 최소화하며 세포외소포·알란토인·감초 진정 성분만 추가.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">왜 "각질 정돈 없는 한 주"가 필요한가</div>
+        문제성 피부에서는 매주 각질 자극을 누적시키는 것보다 <strong>주기적 휴식 주간을 배치</strong>하는 편이 피부장벽 구조 회복에 유리합니다. Week 3는 로테이션의 중반에서 "리셋 지점" 역할을 하며, 마이크로바이옴 다양성·칼슘 신호·히알루론산 수분 매트릭스에만 집중함으로써 피부장벽 재조립에 유리한 환경을 만듭니다.
+      </div>
+
+      <div class="talk-box">
+        <div class="talk-label">고객 커뮤니케이션 포인트</div>
+        <div class="talk-quote">"이번 주는 '각질 정돈 없는 휴식 관리'입니다. 피부장벽이 편안하게 재정비될 수 있도록 설계된 주차로, 마이크로바이옴 균형과 칼슘 장벽, 그리고 7종 히알루론산까지 깊은 수분감에 집중했어요."</div>
+      </div>
+
+    </div>
+  </details>
+
+  <!-- ======== WEEK 4 ======== -->
+  <details class="acc wk-acc" data-wk="4">
+    <summary>
+      <span class="acc-icon">IV</span>
+      <span class="acc-title">
+        <span class="kicker">Week 04 · Complete Radiance</span>
+        윤광 & 종합 컴플리트 — 비타민 네트워크와 종합 영양 마감
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+
+      <div class="program-meta">
+        <div class="pm-cell"><div class="pm-label">Duration</div><div class="pm-value">약 80분</div></div>
+        <div class="pm-cell"><div class="pm-label">Intensity</div><div class="pm-value">Mid · 종합 마감</div></div>
+        <div class="pm-cell"><div class="pm-label">Key Products</div><div class="pm-value">엑소토카인 부스터 · 토코포르테 · 칼리파우더</div></div>
+        <div class="pm-cell"><div class="pm-label">Cali Powder</div><div class="pm-value">토코포르테와 혼합</div></div>
+      </div>
+
+      <div class="prose-body">
+        <p>4주 로테이션의 마감 주차. 3주간 누적된 진정·정돈·장벽 재정비 위에 <strong>종합 영양과 항산화 네트워크로 윤광을 끌어올리는 관리</strong>입니다. 엑소토카인 부스터의 모든 영양 축과 토코포르테의 비타민 네트워크를 함께 운용하며, 데콜테까지 관리 영역을 확장합니다.</p>
+      </div>
+
+      <h3 class="protocol-title">단계별 프로토콜</h3>
+
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-time mono">~5 min</div>
+        <div class="step-content">
+          <div class="step-name">클렌징</div>
+          <div class="step-product">저자극 클렌저</div>
+          <div class="step-desc">가볍게 세안.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-time mono">~7 min</div>
+        <div class="step-content">
+          <div class="step-name">리퀴드 마스크 짧은 팩</div>
+          <div class="step-product">Exotokine Liquid Mask</div>
+          <div class="step-desc">5분 팩 형태로 가볍게 각질 정돈. 2주차만큼 집중적이지 않게.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-time mono">~15 min</div>
+        <div class="step-content">
+          <div class="step-name">에센스 겔 데콜테 확장 마사지</div>
+          <div class="step-product">Exotokine Essence Gel</div>
+          <div class="step-desc">얼굴~목~데콜테~어깨 라인까지 확장 마사지. 관리 영역이 넓어지며 여러 번 덧발라도 밀리지 않는 제형 특성을 최대로 활용.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-time mono">~15 min</div>
+        <div class="step-content">
+          <div class="step-name">엑소토카인 부스터 전면 도포 <span style="display:inline-block; background:var(--gold-soft); color:var(--gold); padding:2px 8px; border-radius:3px; font-size:10.5px; font-weight:600; letter-spacing:0.05em; margin-left:6px;">이 주의 주연</span></div>
+          <div class="step-product">Exotokine Booster Ampoule</div>
+          <div class="step-desc">칼리파우더는 이 단계에서 혼합하지 않고 <strong>다음 단계에서 토코포르테에 혼합</strong>. 엑소토카인 부스터는 단독으로 9종 아미노산·SH-펩타이드 군·EGF 유사 성분·시카세포외소포·MNM·루페올·글루타티온의 종합 영양을 공급.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-time mono">~10 min</div>
+        <div class="step-content">
+          <div class="step-name">칼리파우더 + 토코포르테 윤광 피니시</div>
+          <div class="step-product">Cali Powder + Exotokine Tocoforte</div>
+          <div class="step-desc">칼리파우더 1회분을 토코포르테에 혼합하여 스프레이. 7종 히알루론산 풀 스펙트럼 + 복합 비타민 네트워크(B·C·E·K) + 칼슘그래디언트의 종합 피니시. 피부 표면에 수분 윤광 막을 형성.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">4주 로테이션의 마무리 의미</div>
+        이 주차는 "성분을 가장 많이 쓰는 주"가 아니라, <strong>3주간의 준비된 피부 위에 종합 영양을 올리는 주</strong>입니다. 피부장벽이 Week 1~3을 거치며 안정된 상태에서 엑소토카인 부스터의 펩타이드·아미노산 기여가 가장 효율적으로 이루어집니다. 고객에게는 "관리 사이클의 마무리"라는 내러티브로 심리적 만족감을 함께 전달할 수 있습니다.
+      </div>
+
+      <div class="talk-box">
+        <div class="talk-label">고객 커뮤니케이션 포인트</div>
+        <div class="talk-quote">"4주 로테이션의 마무리로, 9종 아미노산과 펩타이드의 종합 영양 위에 비타민 B·C·E·K 네트워크와 7종 히알루론산까지 올려 <em>윤광</em>을 끌어올리는 관리입니다. 데콜테까지 확장해서 목과 가슴 라인도 함께 정돈해 드려요."</div>
+      </div>
+
+    </div>
+  </details>
+</section>
+
+<!-- ============ SECTION 04 · INGREDIENT CONTRIBUTION MATRIX ============ -->
+<section class="section">
+  <div class="section-header">
+    <h2>제품별 전성분 기여 매트릭스</h2>
+    <span class="section-num">04</span>
+  </div>
+  <p class="section-intro">
+    본 프로그램에서 <strong>각 제품이 문제성 피부에 어떤 고유 기여를 하는지</strong> 정리한 섹션입니다. 전성분을 기반으로 작용 축을 도출하였으며, 제품 교육 시 참고하시면 됩니다.
+  </p>
+
+  <!-- Liquid Mask -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5 5l14 14M5 19L19 5"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Product 01</span>
+        Exotokine Liquid Mask — PHA 10% + 세포외소포
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <table class="matrix-table">
+        <thead><tr><th>주요 성분</th><th>문제성 피부에의 기여</th></tr></thead>
+        <tbody>
+          <tr><td class="ingredient">글루코노락톤<span class="tag">PHA 10%</span></td><td class="role">약 180 Da의 폴리하이드록시애씨드. 각질 표층에만 작용, 항산화 특성. No-Rinse 설계.</td></tr>
+          <tr><td class="ingredient">병풀캘러스세포외소포</td><td class="role">각질 정돈 과정에서 동시에 진정·컨디셔닝 축을 제공.</td></tr>
+          <tr><td class="ingredient">알란토인 · 다이포타슘글리시리제이트</td><td class="role">감초 유래 성분 포함. 민감한 피부 진정 서포트.</td></tr>
+          <tr><td class="ingredient">판테놀 · 글라이코리피드</td><td class="role">각질 정돈 후 수분·피부 유연감 유지.</td></tr>
+          <tr><td class="ingredient">히알루론산 4종 <span style="font-size:11px; color:var(--ink-light); font-weight:400;">(가수분해, 소듐형, 트라이모늄형, 크로스폴리머 등)</span></td><td class="role">PHA 단계에서의 수분 손실 보완.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <!-- Essence Gel -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 5v14M5 12h14" opacity="0.3"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Product 02</span>
+        Exotokine Essence Gel — 센텔라 트리플 액티브 + 낫또 보습
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <table class="matrix-table">
+        <thead><tr><th>주요 성분</th><th>문제성 피부에의 기여</th></tr></thead>
+        <tbody>
+          <tr><td class="ingredient">병풀캘러스세포외소포</td><td class="role">겔 제형에서도 세포외소포 플랫폼을 유지. 마사지 중 표피 표층에 일관 노출.</td></tr>
+          <tr><td class="ingredient">마데카식애씨드 · 아시아틱애씨드 · 아시아티코사이드 <span class="tag">트리플 액티브</span></td><td class="role">센텔라 유래 트리테르페노이드 삼중 조합. 진정·컨디셔닝의 핵심 축.</td></tr>
+          <tr><td class="ingredient">폴리글루타믹애씨드<span style="font-size:11px; color:var(--ink-light); font-weight:400;">(γ-PGA, 낫또 유래)</span></td><td class="role">히알루론산 대비 높은 수분 유지력으로 장시간 보습 구조 형성.</td></tr>
+          <tr><td class="ingredient">아크릴레이트/C10-30알킬아크릴레이트크로스폴리머<br>암모늄아크릴로일다이메틸타우레이트/VP코폴리머</td><td class="role">겔 점도를 만드는 음이온성 폴리머. <strong>칼리파우더 직접 혼합 지양 근거 제형.</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn">
+        <div class="callout-title">⚠ 마사지 캐리어로서의 역할</div>
+        에센스 겔은 1~2분 후 100% 흡수되어 "아무것도 남지 않는" 특수 제형입니다. 마사지 → 다음 단계 제품 도포 시 밀리거나 끈적이지 않아 샵 관리의 <strong>기본 필수템</strong>으로 작용합니다.
+      </div>
+    </div>
+  </details>
+
+  <!-- Pidiroenne -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="3"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="14" r="2"/><circle cx="12" cy="18" r="1.5"/><path d="M9 12l3-6M9 12l3 6M9 12l7 2" opacity="0.4"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Product 03</span>
+        Pidiroenne Booster — 마이크로바이옴 + PDRN 컨셉
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <table class="matrix-table">
+        <thead><tr><th>주요 성분</th><th>문제성 피부에의 기여</th></tr></thead>
+        <tbody>
+          <tr><td class="ingredient">락토바실러스발효추출여과물<span class="tag">Microbiome</span></td><td class="role">유익균 대사산물 기반의 피부 컨디셔닝.</td></tr>
+          <tr><td class="ingredient">하이드롤라이즈드디엔에이<span class="tag">PDRN 컨셉</span></td><td class="role">DNA 분해 단편 형태의 화장품 등급 성분. 피부 컨디셔닝.</td></tr>
+          <tr><td class="ingredient">하이드롤라이즈드콜라겐</td><td class="role">저분자 콜라겐 단편. 보습 기반 컨디셔닝.</td></tr>
+          <tr><td class="ingredient">프로폴리스추출물 · 오레가노추출물 · 마데카소사이드</td><td class="role">다층 진정 복합. 민감 피부 컨디셔닝 서포트.</td></tr>
+          <tr><td class="ingredient">트라넥사믹애씨드</td><td class="role">염증 후 색소 침착(PIH) 성향 피부의 톤 정돈.</td></tr>
+          <tr><td class="ingredient">판테놀 · 알란토인 · 베타인 · 트레할로오스</td><td class="role">진정 · 수분 유지 · 보호 복합.</td></tr>
+          <tr><td class="ingredient">SH-폴리펩타이드-60 · 사이아노코발아민(B12)</td><td class="role">피부 컨디셔닝 펩타이드 + 비타민.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <!-- Exotokine Booster -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><path d="M12 2l2 5h5l-4 3.5L17 16l-5-3-5 3 2-5.5L5 7h5z"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Product 04</span>
+        Exotokine Booster — 9종 아미노산 + 펩타이드 풀스펙트럼
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <table class="matrix-table">
+        <thead><tr><th>주요 성분군</th><th>문제성 피부에의 기여</th></tr></thead>
+        <tbody>
+          <tr><td class="ingredient">병풀캘러스세포외소포 + 마데카소사이드</td><td class="role">부스터 제형에서도 세포외소포 플랫폼 유지.</td></tr>
+          <tr><td class="ingredient">9종 아미노산<br><span style="font-size:11px; color:var(--ink-light); font-weight:400;">알지닌·히스티딘·아이소류신·류신·라이신·메티오닌·페닐알라닌·트레오닌·발린·트립토판 + 시스테인</span></td><td class="role">피부 자연 보습 인자(NMF) 유사 구성의 아미노산 복합.</td></tr>
+          <tr><td class="ingredient">SH-올리고펩타이드-1, -2<br>SH-폴리펩타이드-1, -2, -3, -4, -9, -11, -22<span class="tag">EGF 유사</span></td><td class="role">성장인자 유사 펩타이드 다중 조합. 손상된 피부장벽 상태에서 표층 컨디셔닝 기여.</td></tr>
+          <tr><td class="ingredient">니코틴아마이드모노뉴클레오타이드(MNM)</td><td class="role">NAD+ 전구체 개념의 화장품 등급 성분.</td></tr>
+          <tr><td class="ingredient">나이아신아마이드 · 페룰릭애씨드 · 글루타티온 · 소듐아스코빌포스페이트</td><td class="role">다층 항산화 네트워크.</td></tr>
+          <tr><td class="ingredient">루페올 · 판테놀 · 하이드롤라이즈드디엔에이</td><td class="role">피부 컨디셔닝 복합.</td></tr>
+          <tr><td class="ingredient">잔탄검</td><td class="role">제형 점도 유지. <strong>칼리파우더와 혼합 가능</strong>한 제형 기반.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <!-- Tocoforte -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><path d="M12 3C7 3 4 7 4 12s3 9 8 9 8-4 8-9-3-9-8-9zM12 8v8M8 12h8" opacity="0.4"/><circle cx="12" cy="12" r="3"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Product 05</span>
+        Exotokine Tocoforte — 7종 HA + 복합 비타민 네트워크
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <table class="matrix-table">
+        <thead><tr><th>주요 성분군</th><th>문제성 피부에의 기여</th></tr></thead>
+        <tbody>
+          <tr><td class="ingredient">병풀수 + 병풀캘러스세포외소포</td><td class="role">센텔라 유래 수용성 성분과 세포외소포의 복합 작용.</td></tr>
+          <tr><td class="ingredient">히알루론산 7종 <span style="font-size:11px; color:var(--ink-light); font-weight:400;">(초저분자~고분자 풀 스펙트럼)</span></td><td class="role">각질층 각 깊이별 수분 매트릭스 형성.</td></tr>
+          <tr><td class="ingredient">비타민 B군<br><span style="font-size:11px; color:var(--ink-light); font-weight:400;">B1(티아민)·B3(나이아신아마이드)·B5(판테놀)·B6(피리독신)·B7(바이오틴)·B9(폴릭애씨드)·B12(사이아노코발아민) + 이노시톨·카르니틴</span></td><td class="role">피부 컨디셔닝 복합.</td></tr>
+          <tr><td class="ingredient">비타민 C 계열<br><span style="font-size:11px; color:var(--ink-light); font-weight:400;">아스코빅애씨드·3-O-에틸아스코빅애씨드·페룰릭애씨드</span></td><td class="role">다형태 비타민 C 조합의 항산화 축.</td></tr>
+          <tr><td class="ingredient">토코페롤(E) · 메나다이온(K) · 퀘세틴 · 글루타티온</td><td class="role">지용성 항산화 + 폴리페놀 + 주요 세포 내 항산화 물질의 다층 네트워크.</td></tr>
+          <tr><td class="ingredient">제형: 액상</td><td class="role"><strong>에어 스프레이 응용 가능.</strong> 쿨링 & 미스트 마감에 적합. 칼리파우더와 혼합 가능.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <!-- Cali Powder -->
+  <details class="acc">
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Product 06</span>
+        Cali Powder — 동결건조 칼슘그래디언트
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <table class="matrix-table">
+        <thead><tr><th>주요 성분</th><th>문제성 피부에의 기여</th></tr></thead>
+        <tbody>
+          <tr><td class="ingredient">칼슘판토테네이트<span class="tag">판토텐산 Ca</span></td><td class="role">표피 칼슘그래디언트 컨셉 기반 핵심 성분. 판토텐산(B5) 유도체로 피부 컨디셔닝 기여.</td></tr>
+          <tr><td class="ingredient">하이드롤라이즈드콜라겐</td><td class="role">저분자 콜라겐 보습.</td></tr>
+          <tr><td class="ingredient">소듐하이알루로네이트 · 만니톨</td><td class="role">수분 유지 + 안정화 보조제.</td></tr>
+          <tr><td class="ingredient">제형: 동결건조 분말</td><td class="role">사용 직전 혼합 방식으로 안정성 확보. <strong>프리미엄 브랜딩</strong> 및 업셀링 포인트.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn">
+        <div class="callout-title">⚠ 혼합 호환성 재확인</div>
+        <div class="rg-2col" style="margin-top:8px;">
+          <div><strong style="color:var(--accent);">✓ 혼합 권장</strong>
+            <ul class="clean-list" style="margin-top:6px;">
+              <li>Tocoforte (히알루론산 기반)</li>
+              <li>Exotokine Booster (잔탄검 기반)</li>
+              <li>Liquid Mask (저점도 베이스)</li>
+            </ul>
+          </div>
+          <div><strong style="color:var(--warning);">✗ 직접 혼합 지양</strong>
+            <ul class="clean-list" style="margin-top:6px;">
+              <li>Essence Gel (카보머/아크릴레이트)</li>
+              <li>Pidiroenne (암모늄아크릴로일 코폴리머)</li>
+              <li>→ 순차 도포로 대체 권장</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ============ SECTION 05 · HOMECARE LINKAGE ============ -->
+<section class="section">
+  <div class="section-header">
+    <h2>홈케어 연계 가이드</h2>
+    <span class="section-num">05</span>
+  </div>
+  <p class="section-intro">
+    샵 관리의 효과를 재방문 사이에 유지하기 위한 홈케어 연계 가이드입니다. 문제성 피부 고객에게 가장 우선 추천할 두 가지 핵심 제품을 중심으로 구성하였습니다.
+  </p>
+
+  <details class="acc" open>
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Home Care · Priority 01</span>
+        Exotokine Liquid Mask — 오버나이트 물광/윤광 팩
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <div class="prose-body">
+        <p>자기 전 피부장벽이 편안한 상태에서 <strong>리퀴드 마스크 반 병을 얼굴에 도포</strong>하고, 팩 시트로 덮거나 그대로 두고 충분히 수면합니다. 아침에 남은 반 병을 바르고 그 위에 바로 <strong>메이크업을 올려도 됩니다</strong>. 이 루틴은 속부터 차오르는 은은한 물광/윤광 효과를 내는 데 최적화되어 있습니다. 문제성 피부 고객에게는 재방문 사이의 각질·수분 균형 유지 수단으로 권장합니다.</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Home Care · Priority 02</span>
+        Exotokine Tocoforte — 쿨링 & 수분 미스트
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <div class="prose-body">
+        <p>액상 제형의 장점을 살려 작은 스프레이 용기에 소분하여 휴대 가능합니다. 문제성 피부 고객이 <strong>외출 중 피부 열감이 올라올 때 쿨링 미스트</strong>로 활용하거나, 메이크업 위에 가볍게 수분 보충용으로 사용할 수 있도록 안내합니다. 7종 히알루론산과 비타민 네트워크가 하루 중 수시로 공급됩니다.</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>
+      <span class="acc-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 8h18M3 16h18" opacity="0.3"/><circle cx="12" cy="12" r="2"/></svg></span>
+      <span class="acc-title">
+        <span class="kicker">Home Care · Note</span>
+        샵 관리 전후 주의사항
+      </span>
+      <span class="acc-arrow"></span>
+    </summary>
+    <div class="acc-body">
+      <ul class="clean-list">
+        <li>관리 당일 저녁은 <strong>새로운 각질 관리 제품(AHA/BHA/레티놀/스크럽)을 사용하지 않도록</strong> 안내합니다.</li>
+        <li>자외선 차단제를 평소보다 <strong>꼼꼼히 재도포</strong>하도록 안내합니다 (PHA 사용 주차 이후 특히 중요).</li>
+        <li>문제성 피부 부위에 대한 <strong>압출·자가 관리</strong>는 다음 방문까지 지양하도록 안내합니다.</li>
+        <li>낮은 강도의 저자극 클렌저만 사용하도록 권장합니다.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="doc-footer">
+  <div class="foot-left">
+    <div class="foot-title">화장품 표시·광고법 준수 안내</div>
+    본 자료는 화장품 표시·광고법을 준수하여 작성되었으며, 의약품적 효능·효과를 표방하지 않습니다. 본 문서 내 "진정·보습·피부장벽 컨디셔닝·피부결 정돈·수분 매트릭스"는 화장품이 가질 수 있는 기능적 표현 범위 내에서 기술되었습니다. 본 자료는 에스테틱 전문가 교육 목적의 내부 참고용이며, 대외 광고·마케팅 문구로의 직접 전용은 금지됩니다.
+  </div>
+  <div class="foot-right">
+    Soongsil University<br>
+    Biomedical Engineering Lab<br>
+    <span style="font-style:normal; font-family:'Noto Sans KR',sans-serif; font-size:11px; color:var(--ink-light); letter-spacing:0.05em;">DR. BAE · 2026 ED.</span>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
