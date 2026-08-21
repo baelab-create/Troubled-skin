@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>문제성 피부 4주 로테이션 관리 프로그램 | 숭실대학교 의공학 연구실</title>
 
@@ -37,7 +38,7 @@
 :root {
   --ink: #12202d;
   --ink-soft: #3d4c5e;
-  --ink-light: #6b7785;
+  --ink-light: #66717E;
   --ink-faint: #a8afba;
   --paper: #f6f4ee;
   --paper-warm: #efece1;
@@ -63,7 +64,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   background: var(--paper);
   color: var(--ink);
   line-height: 1.75;
@@ -1297,6 +1298,23 @@ ul.clean-list li::before {
   details.acc { break-inside: avoid; page-break-inside: avoid; }
   details.acc summary { pointer-events: none; }
   details:not([open]) { display: none; }
+}
+</style>
+<style id="drbae-compat">
+/* ===== DR.BAE 공통 호환성 베이스라인 (자동 생성) ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+img,video{max-width:100%;}
+body{word-break:keep-all;overflow-wrap:break-word;}
+.drbae-tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.drbae-thint{display:none;}
+@media(max-width:640px){
+  .drbae-tscroll>table{min-width:540px;}
+  .drbae-thint{display:block;font-size:11px;color:#5F6875;margin:2px 0 6px;}
+}
+@media(hover:none){summary{min-height:44px;}}
+.step-name span,.dt-action-label,.dt-node .dt-level{color:#7C6640 !important;} /* 소형 텍스트 골드 대비 4.5:1 */
+@media(max-width:520px){
+  .dt-action-kicker,.dt-level-kicker,.dt-action .dt-action-label,.dt-cat-kicker,.dt-col + .dt-col::before,.dt-common-sign,.dt-node .dt-level,.dt-root-en,.matrix-table .tag,.pm-cell .pm-label,.acc-title .kicker,.doc-top .confidential,.dt-action-list,.dt-branch-label,.dt-level-detail,.hero .meta-item .label,.matrix-table th,.rot-cell .star-tag,.rot-cell .wk-label,.talk-box .talk-label{font-size:11px !important;}
 }
 </style>
 </head>
@@ -2779,5 +2797,18 @@ ul.clean-list li::before {
 </footer>
 
 </div>
+<script>
+/* 표를 가로 스크롤 래퍼로 감싸 좁은 화면에서 칸이 뭉개지지 않게 함 */
+(function(){
+  document.querySelectorAll('table').forEach(function(t){
+    if(t.parentElement && t.parentElement.classList.contains('drbae-tscroll')) return;
+    var w=document.createElement('div'); w.className='drbae-tscroll';
+    t.parentNode.insertBefore(w,t); w.appendChild(t);
+    var h=document.createElement('div'); h.className='drbae-thint';
+    h.textContent='\u2194 \ud45c\ub294 \uc881\uc740 \ud654\uba74\uc5d0\uc11c \uc88c\uc6b0\ub85c \ubc00\uc5b4 \ubcfc \uc218 \uc788\uc2b5\ub2c8\ub2e4';
+    w.parentNode.insertBefore(h,w);
+  });
+})();
+</script>
 </body>
 </html>
