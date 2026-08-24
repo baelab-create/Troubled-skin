@@ -2946,5 +2946,32 @@ details[open] .dbc-native,
   });
 })();
 </script>
+<script id="drbae-anchor">
+/* 아코디언을 눌렀을 때 방금 누른 헤더가 화면에서 움직이지 않도록 스크롤 보정 */
+(function(){
+  var SEL = 'details > summary, .acc-head, .acc-h, .ri-h, a.seclink';
+  function hold(h){
+    var before = h.getBoundingClientRect().top;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        var diff = h.getBoundingClientRect().top - before;
+        if(Math.abs(diff) < 1) return;
+        var root = document.documentElement;
+        var prev = root.style.scrollBehavior;
+        root.style.scrollBehavior = 'auto';      /* 부드러운 스크롤과 충돌 방지 */
+        window.scrollBy(0, diff);
+        root.style.scrollBehavior = prev;
+      });
+    });
+  }
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if(!t || !t.closest) return;
+    var h = t.closest(SEL);
+    if(!h || h.tagName === 'A') return;          /* 링크 이동은 보정하지 않음 */
+    hold(h);
+  }, true);
+})();
+</script>
 </body>
 </html>
